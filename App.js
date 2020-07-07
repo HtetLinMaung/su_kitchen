@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, ImageBackground } from "react-native";
+import { StyleSheet, View, ImageBackground } from "react-native";
 import { AppLoading } from "expo";
-import { Button, Text } from "native-base";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
-import Typography from "./components/Typography";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import GetstartedScreen from "./screens/GetstartedScreen";
+import StartScreen from "./screens/StartScreen";
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -15,6 +17,8 @@ const fetchFonts = () => {
     ...Ionicons.font
   });
 };
+
+const Stack = createStackNavigator();
 
 const App = () => {
   const [ready, setReady] = useState(false);
@@ -30,45 +34,23 @@ const App = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("./assets/ma-la-xiang-guo-10.jpg")}
-        style={styles.backgroundImage}
-      >
-        <View></View>
-        <View></View>
-        <View></View>
-        <View style={styles.buttonContainer}>
-          <Button rounded style={styles.button}>
-            <Typography style={styles.buttonText}>Get started</Typography>
-          </Button>
-        </View>
-      </ImageBackground>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="GetstartedScreen">
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="GetstartedScreen"
+          component={GetstartedScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="StartScreen"
+          component={StartScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "space-around",
-    alignItems: "center"
-  },
-  buttonContainer: {
-    flexDirection: "row"
-  },
-  button: {
-    backgroundColor: "#FF6239",
-    width: "40%",
-    justifyContent: "center"
-  },
-  buttonText: {
-    color: "white"
-  }
-});
+const styles = StyleSheet.create({});
 
 export default App;
