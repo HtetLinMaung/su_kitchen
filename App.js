@@ -4,9 +4,7 @@ import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import GetstartedScreen from "./screens/GetstartedScreen";
-import StartScreen from "./screens/StartScreen";
+import Navigator from "./components/Navigator";
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -17,8 +15,6 @@ const fetchFonts = () => {
     ...Ionicons.font
   });
 };
-
-const Stack = createStackNavigator();
 
 const App = () => {
   const [ready, setReady] = useState(false);
@@ -35,18 +31,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="GetstartedScreen">
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="GetstartedScreen"
-          component={GetstartedScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="StartScreen"
-          component={StartScreen}
-        />
-      </Stack.Navigator>
+      <Navigator />
     </NavigationContainer>
   );
 };

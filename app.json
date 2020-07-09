@@ -13,14 +13,14 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
+    "assetBundlePatterns": ["**/*"],
+
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.htetlinmaung.su_kitchen",
+      "versionCode": 1
     }
   }
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import StartLayout from "../components/StartLayout";
 import MainButton from "../components/start/MainButton";
+import { Colors } from "../constants/colors";
 
 const StartScreen = ({ navigation }) => {
   return (
@@ -10,14 +11,14 @@ const StartScreen = ({ navigation }) => {
         <MainButton
           style={styles.register}
           title="I'm new"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("SignupScreen")}
         />
       </View>
       <View style={styles.buttonContainer}>
         <MainButton
           style={styles.login}
           title="I've been here"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("LoginScreen")}
         />
       </View>
     </StartLayout>
@@ -34,10 +35,10 @@ const styles = StyleSheet.create({
     marginBottom: 50
   },
   login: {
-    backgroundColor: "#FF6239"
+    backgroundColor: Colors.orange
   },
   register: {
-    backgroundColor: "#3E5FCE"
+    backgroundColor: Colors.blue
   }
 });
 
