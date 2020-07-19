@@ -1,20 +1,53 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
   Keyboard,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage,
+  Alert
 } from "react-native";
 import StartLayout from "../components/StartLayout";
 import Typography from "../components/Typography";
 import FilledInput from "../components/FilledInput";
 import MainButton from "../components/start/MainButton";
+
 import { Colors } from "../constants/colors";
+import { environment } from "../environment";
 
 const LoginScreen = ({ navigation }) => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+
+  const loginHandler = async () => {
+    try {
+      if (!phone || phone.length < 9 || phone.length > 11) {
+        const error = new Error("Invalid Phone number!");
+        throw error;
+      }
+      if (!password) {
+        const error = new Error("Password should not be empty!");
+        throw error;
+      }
+      const response = await axios.post(`${environment.host}/api/auth/login`, {
+        phone_no: phone,
+        password
+      });
+
+      await AsyncStorage.setItem("token", response.data.token);
+      setPhone("");
+      setPassword("");
+      navigation.navigate("HomeScreen");
+    } catch (err) {
+      let message = err.message;
+      if (err.response) {
+        message = err.response.data.message;
+      }
+      Alert.alert("Something wrong!", message);
+    }
+  };
 
   return (
     <StartLayout style={styles.root}>
@@ -28,6 +61,7 @@ const LoginScreen = ({ navigation }) => {
               value={phone}
               onChangeText={(text) => setPhone(text)}
               placeholder="Phone number or email"
+              keyboardType={"numeric"}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -45,7 +79,7 @@ const LoginScreen = ({ navigation }) => {
             <MainButton
               title="Sign in"
               style={styles.button}
-              onPress={() => {}}
+              onPress={loginHandler}
             />
           </View>
           <View style={styles.signUpContainer}>

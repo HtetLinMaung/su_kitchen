@@ -4,13 +4,16 @@ import {
   View,
   TouchableWithoutFeedback,
   Keyboard,
-  CheckBox
+  CheckBox,
+  Alert
 } from "react-native";
 import StartLayout from "../components/StartLayout";
 import Typography from "../components/Typography";
 import FilledInput from "../components/FilledInput";
 import MainButton from "../components/start/MainButton";
 import { Colors } from "../constants/colors";
+import axios from "axios";
+import { environment } from "../environment";
 
 const SignupScreen = ({ navigation }) => {
   const [agree, setAgree] = useState(false);
@@ -18,6 +21,49 @@ const SignupScreen = ({ navigation }) => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+
+  const signupHandler = async () => {
+    if (agree) {
+      try {
+        if (!phone || phone.length < 9 || phone.length > 11) {
+          const error = new Error("Invalid Phone number!");
+          throw error;
+        }
+        if (!password) {
+          const error = new Error("Password should not be empty!");
+          throw error;
+        }
+        if (confirm !== password) {
+          const error = new Error("Password not match!");
+          throw error;
+        }
+        if (!username) {
+          const error = new Error("Username should not be empty!");
+          throw error;
+        }
+        const response = await axios.put(
+          `${environment.host}/api/auth/signup`,
+          {
+            phone_no: phone,
+            password,
+            name: username
+          }
+        );
+        setAgree(false);
+        setConfirm("");
+        setPassword("");
+        setPhone("");
+        setUsername("");
+        navigation.navigate("LoginScreen");
+      } catch (err) {
+        let message = err.message;
+        if (err.response) {
+          message = err.response.data.data[0].msg;
+        }
+        Alert.alert("Something wrong!", message);
+      }
+    }
+  };
 
   return (
     <StartLayout style={styles.root}>
@@ -35,6 +81,7 @@ const SignupScreen = ({ navigation }) => {
           </View>
           <View style={styles.inputContainer}>
             <FilledInput
+              keyboardType={"numeric"}
               value={phone}
               onChangeText={(text) => setPhone(text)}
               placeholder="Phone number or email"
@@ -67,7 +114,7 @@ const SignupScreen = ({ navigation }) => {
             </Typography>
           </View>
           <View>
-            <MainButton title="Sign up" onPress={() => {}} />
+            <MainButton title="Sign up" onPress={signupHandler} />
           </View>
         </View>
       </TouchableWithoutFeedback>
